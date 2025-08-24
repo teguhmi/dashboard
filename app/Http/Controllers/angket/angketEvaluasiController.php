@@ -277,6 +277,9 @@ class angketEvaluasiController extends Controller
             }
             return redirect()->back()->with(['success' => 'Data ' . $masa . ' berhasil di transfer']);
         }
+        if($jenis == 'excel'){
+            dd('Hai saya excel');
+        }
     }
 
 

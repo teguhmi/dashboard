@@ -6,7 +6,7 @@
             <h4 class="card-title">Hasil Evaluasi Tutorial TTM/Tuweb masa {{$data_array[0]->masa}}
             <div class="col s1 float-right">
                 <a class="float-right waves-effect waves-light btn gradient-45deg-green-teal box-shadow-none border-round mr-1 mb-1"
-                   href="">Excel
+                   href="{{route ('angket.penilaian', ['id' => Crypt::encrypt($masa),'jenis'=>'excel'])}}">Excel
                 </a>
             </div>
             </h4>

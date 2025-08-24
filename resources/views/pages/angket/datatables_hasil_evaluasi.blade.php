@@ -3,12 +3,13 @@
     {{--        <div class="section section-data-tables">--}}
     <div id="basic-form" class="card card-default scrollspy">
         <div class="card-content">
-            <h4 class="card-title">Hasil Evaluasi Tutorial TTM/Tuweb masa {{$data_array[0]->masa}}</h4>
+            <h4 class="card-title">Hasil Evaluasi Tutorial TTM/Tuweb masa {{$data_array[0]->masa}}
             <div class="col s1 float-right">
                 <a class="float-right waves-effect waves-light btn gradient-45deg-green-teal box-shadow-none border-round mr-1 mb-1"
                    href="">Excel
                 </a>
             </div>
+            </h4>
             <div class="row">
                 <div class="col s12">
                     <table id="page-length-option" class="display" style="width: 100%">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\angket;
 
+use App\Exports\HasilEvaluasiTutor;
 use App\Http\Controllers\Controller;
 use App\Models\angket\angketEvaluasiModel;
 use App\Models\angket\angketTutorModel;
@@ -10,6 +11,7 @@ use App\Models\srs\QuerySRS5G;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\ValidationException;
+use Excel;
 
 class angketEvaluasiController extends Controller
 {
@@ -26,24 +28,23 @@ class angketEvaluasiController extends Controller
             return view('pages.angket.angketEvaluasiTutor');
         } else {
             try {
-                $validator = $this->validate($request, [
-                    '_token' => 'required',
-                ]);
+                $validator = $this->validate($request, ['_token' => 'required',]);
 
             } catch (ValidationException $e) {
                 return redirect()->back()->with(['warning' => ' Data Masa tidak sesuai...']);
             }
-            $id=Crypt::encrypt($id);
+            $id = Crypt::encrypt($id);
             return $this->reload($id);
 
         }
     }
 
-    public static function reload($id) {
+    public static function reload($id)
+    {
         $masa = decrypt($id);
         $data_array = angketEvaluasiModel::get_penilaian($masa);
         $data_etm = angketEvaluasiModel::jumlah_etm($masa);
-        if(empty($data_etm)) {
+        if (empty($data_etm)) {
             return redirect()->back()->with(['warning' => ' Belum ada data Evaluasi Tutor oleh Mahasiswa']);
         } else {
             foreach ($data_etm as $items) {
@@ -51,20 +52,11 @@ class angketEvaluasiController extends Controller
                 $idtutor = $items->idtutor;
                 $kodemtk = $items->kode_mtk;
 
-                $jadwal = angketEvaluasiModel::get_sync_tutor($masa,$idtutor,$kodemtk);
-                if(empty($jadwal)) {
-                    $array[]='';
+                $jadwal = angketEvaluasiModel::get_sync_tutor($masa, $idtutor, $kodemtk);
+                if (empty($jadwal)) {
+                    $array[] = '';
                 } else {
-                    $array[] = array(
-                        'masa' => $masa,
-                        'idtutor' => $idtutor,
-                        'kodemtk' => $kodemtk,
-                        'nama_lengkap' => $jadwal[0]->nama_lengkap,
-                        'nama_matakuliah' => $jadwal[0]->nama_matakuliah,
-                        'nama_hari' => $jadwal[0]->nama_hari,
-                        'jam' => $jadwal[0]->jam,
-                        'etm' => $items->etm,
-                    );
+                    $array[] = array('masa' => $masa, 'idtutor' => $idtutor, 'kodemtk' => $kodemtk, 'nama_lengkap' => $jadwal[0]->nama_lengkap, 'nama_matakuliah' => $jadwal[0]->nama_matakuliah, 'nama_hari' => $jadwal[0]->nama_hari, 'jam' => $jadwal[0]->jam, 'etm' => $items->etm,);
                 }
             }
         }
@@ -72,14 +64,15 @@ class angketEvaluasiController extends Controller
             $data_array = '';
 //            return view('pages.angket.angketEvaluasiTutor', compact('masa'))->with(['error' => 'Data tidak ditemukan']);
         }
-        if(empty($array)) {
+        if (empty($array)) {
             $array = '';
         }
-        return view('pages.angket.angketEvaluasiTutor', compact('data_array','array','masa'));
+        return view('pages.angket.angketEvaluasiTutor', compact('data_array', 'array', 'masa'));
     }
+
     public function proses_penilaian($masa, $jenis)
     {
-       $masa = decrypt($masa);
+        $masa = decrypt($masa);
         if ($jenis == 'penilaian') {
             $sql = jadwal_tutorialModel::get_jadwal_ttm_by_masa_join($masa);
             if (empty($sql)) {
@@ -129,22 +122,7 @@ class angketEvaluasiController extends Controller
                                 $total = number_format((float)($total / 15), 2, '.', '');
 
                             }
-                            $ratarata = array(
-                                'j1' => number_format((float)(array_sum($h1) / count($h1)), 2, '.', ''),
-                                'j2' => number_format((float)(array_sum($h2) / count($h2)), 2, '.', ''),
-                                'j3' => number_format((float)(array_sum($h3) / count($h3)), 2, '.', ''),
-                                'j4' => number_format((float)(array_sum($h4) / count($h4)), 2, '.', ''),
-                                'j5' => number_format((float)(array_sum($h5) / count($h5)), 2, '.', ''),
-                                'j6' => number_format((float)(array_sum($h6) / count($h6)), 2, '.', ''),
-                                'j7' => number_format((float)(array_sum($h7) / count($h7)), 2, '.', ''),
-                                'j8' => number_format((float)(array_sum($h8) / count($h8)), 2, '.', ''),
-                                'j9' => number_format((float)(array_sum($h9) / count($h9)), 2, '.', ''),
-                                'j10' => number_format((float)(array_sum($h10) / count($h10)), 2, '.', ''),
-                                'j11' => number_format((float)(array_sum($h11) / count($h11)), 2, '.', ''),
-                                'j12' => number_format((float)(array_sum($h12) / count($h12)), 2, '.', ''),
-                                'j13' => number_format((float)(array_sum($h13) / count($h13)), 2, '.', ''),
-                                'j14' => number_format((float)(array_sum($h14) / count($h14)), 2, '.', ''),
-                                'j15' => number_format((float)(array_sum($h15) / count($h15)), 2, '.', ''),
+                            $ratarata = array('j1' => number_format((float)(array_sum($h1) / count($h1)), 2, '.', ''), 'j2' => number_format((float)(array_sum($h2) / count($h2)), 2, '.', ''), 'j3' => number_format((float)(array_sum($h3) / count($h3)), 2, '.', ''), 'j4' => number_format((float)(array_sum($h4) / count($h4)), 2, '.', ''), 'j5' => number_format((float)(array_sum($h5) / count($h5)), 2, '.', ''), 'j6' => number_format((float)(array_sum($h6) / count($h6)), 2, '.', ''), 'j7' => number_format((float)(array_sum($h7) / count($h7)), 2, '.', ''), 'j8' => number_format((float)(array_sum($h8) / count($h8)), 2, '.', ''), 'j9' => number_format((float)(array_sum($h9) / count($h9)), 2, '.', ''), 'j10' => number_format((float)(array_sum($h10) / count($h10)), 2, '.', ''), 'j11' => number_format((float)(array_sum($h11) / count($h11)), 2, '.', ''), 'j12' => number_format((float)(array_sum($h12) / count($h12)), 2, '.', ''), 'j13' => number_format((float)(array_sum($h13) / count($h13)), 2, '.', ''), 'j14' => number_format((float)(array_sum($h14) / count($h14)), 2, '.', ''), 'j15' => number_format((float)(array_sum($h15) / count($h15)), 2, '.', ''),
 
                             );
 
@@ -214,14 +192,7 @@ class angketEvaluasiController extends Controller
                             }
 
 
-                            $array = array(
-                                'masa' => $masa,
-                                'id_tutor' => $idtutor,
-                                'kode_matakuliah' => $kodemtk,
-                                'nilai_etm' => $total,
-                                'hasil' => $hasil,
-                                'rekomendasi' => $rekomendasi,
-                                'saran' => $saran,
+                            $array = array('masa' => $masa, 'id_tutor' => $idtutor, 'kode_matakuliah' => $kodemtk, 'nilai_etm' => $total, 'hasil' => $hasil, 'rekomendasi' => $rekomendasi, 'saran' => $saran,
 
                             );
 
@@ -251,20 +222,7 @@ class angketEvaluasiController extends Controller
                     $masa = $items['masa'];
                     $kelas = $items['kelas'];
                     $cek_data = jadwal_tutorialModel::get_jadwal_ttm($masa, $kelas);
-                    $array = array(
-                        'masa' => $items['masa'],
-                        'id_tutor' => $items['id_tutor'],
-                        'nama_lengkap' => $items['nama_lengkap'],
-                        'id_tutorial' => $items['id_tutorial'],
-                        'status_approval' => $items['status_approval'],
-                        'approved' => $items['approved'],
-                        'kelas' => $items['kelas'],
-                        'kode_matakuliah' => $items['kode_matakuliah'],
-                        'nama_matakuliah' => $items['nama_matakuliah'],
-                        'nama_hari' => $items['nama_hari'],
-                        'jam' => $items['jam'],
-                        'lokasi' => $items['lokasi'],
-                    );
+                    $array = array('masa' => $items['masa'], 'id_tutor' => $items['id_tutor'], 'nama_lengkap' => $items['nama_lengkap'], 'id_tutorial' => $items['id_tutorial'], 'status_approval' => $items['status_approval'], 'approved' => $items['approved'], 'kelas' => $items['kelas'], 'kode_matakuliah' => $items['kode_matakuliah'], 'nama_matakuliah' => $items['nama_matakuliah'], 'nama_hari' => $items['nama_hari'], 'jam' => $items['jam'], 'lokasi' => $items['lokasi'],);
                     if (empty($cek_data)) {
                         $query = jadwal_tutorialModel::simpan_jadwal_ttm($array);
                     } else {
@@ -277,10 +235,15 @@ class angketEvaluasiController extends Controller
             }
             return redirect()->back()->with(['success' => 'Data ' . $masa . ' berhasil di transfer']);
         }
-        if($jenis == 'excel'){
-            dd('Hai saya excel');
+        if ($jenis == 'excel') {
+            $id = $masa;
+            $excel = self::excel($id);
+            return $excel;
         }
     }
 
-
+    public function excel($id)
+    {
+        return Excel::download(new HasilEvaluasiTutor($id), $id . '_evaluasi_tutor.xlsx');
+    }
 }

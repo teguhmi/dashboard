@@ -2,9 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\angket\angketEvaluasiModel;
-use App\Models\presensi\presensiModel;
 use DB;
+use App\Models\angket\angketEvaluasiModel;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -45,7 +44,7 @@ class HasilEvaluasiTutor implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function headings(): array
     {
-        return ['Masa', 'ID Tutor', 'Nama Tutor', 'Kode Matakulah', 'Nama Matakuliah', 'Nilai Evaluasi', 'Hasil','Rekomendasi','Saran'];
+        return ['Masa', 'ID Tutor', 'Nama Tutor', 'Kode Matakuliah', 'Nama Matakuliah', 'Nilai Evaluasi', 'Hasil','Rekomendasi','Saran'];
     }
 
 

@@ -43,14 +43,14 @@ class presensiController extends Controller
         $id_kegiatan = $request->input('option');
         $nim = $request->input('id');
         $tgl_lahir = $request->input('tgl_lahir');
-        $query = QuerySRS::getDPbyNIMTgllahir($nim, $tgl_lahir);
+//        $query = QuerySRS::getDPbyNIMTgllahir($nim, $tgl_lahir);
         $cek = presensiModel::getJenisKegiatanbyNIM($nim, $id_kegiatan);
         $DPmahasiswa = QuerySRSController::getdpbynim($nim);
-//        if(!empty($DPmahasiswa)) {
-//            if($DPmahasiswa['tanggal_lahir_mahasiswa'] != $tgl_lahir) {
-//                return redirect()->back()->with(['warning' => ' Data tidak sesuai']);
-//            }
-//        }
+        if(!empty($DPmahasiswa)) {
+            if($DPmahasiswa['tanggal_lahir_mahasiswa'] != $tgl_lahir) {
+                return redirect()->back()->with(['warning' => ' Data tidak sesuai']);
+            }
+        }
         if (!empty($cek)) {
             return redirect()->back()->with(['warning' => $DPmahasiswa['nama_mahasiswa'] . ' Telah mengisi presensi']);
         }

@@ -15,7 +15,7 @@ class legalisir_form extends Controller
 
     public function index(Request $request)
     {
-        $nim = $request->input($nim);
+        $nim = $request->input('nim');
         if(empty($nim)) {
             return view('pages.layanan.legalisir.legalisir_form');
         } else {

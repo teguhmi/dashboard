@@ -20,7 +20,7 @@
         <div class="col s12 m3 l3 centered ">
             <div class="card gradient-shadow gradient-45deg-red-pink border-radius-3 animate fadeUp">
                 <div class="card-content center">
-                    <a href="https://geplak.ut.ac.id/jadwal">
+                    <a href="https://pilot.ut.ac.id/tutorial/jadwal">
                         <img src="../../../app-assets/images/tutorial.png" class="width-40 border-round z-depth-5 responsive-img" alt="image"/>
                         <h5 class="white-text lighten-4">Tutorial</h5>
                         <p class="white-text lighten-4">Kegiatan Tutorial</p>
